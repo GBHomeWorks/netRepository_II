@@ -13,6 +13,7 @@
         <module>server</module>
         <module>nio-examples</module>
         <module>netty-server</module>
+        <module>nio-client</module>
     </modules>
 
 

@@ -10,6 +10,7 @@
         <module name="server" />
         <module name="netty-server" />
         <module name="nio-examples" />
+        <module name="nio-client" />
       </profile>
     </annotationProcessing>
   </component>
