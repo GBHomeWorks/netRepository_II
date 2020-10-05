@@ -34,13 +34,20 @@ public class Controller implements Initializable {
         try {
             ByteBuffer buffer = ByteBuffer.allocate(50);
             FileChannel cannel = new RandomAccessFile(path + "/" + file, "rw").getChannel();
-            while ( cannel.read(buffer) > 0){
+            /*while ( cannel.read(buffer) > 0){
                 buffer.flip();
                 while (buffer.hasRemaining()){
                     System.out.print((char) buffer.get());
                     sChannel.write(buffer);
                 }
-            }
+            }*/
+            cannel.write(buffer);
+            buffer.flip();
+            if (buffer.hasRemaining()) System.out.println("buffer.hasRemaining");        //
+            if (sChannel.isConnected()) System.out.println("sChannel.isConnected");     //
+            sChannel.write(buffer);
+            cannel.close();
+            System.out.println(buffer.hasRemaining());
         } catch (Exception e) {
             e.printStackTrace();
         }

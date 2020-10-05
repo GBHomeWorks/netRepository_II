@@ -1,16 +1,15 @@
 package server;
 
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
+import java.nio.channels.*;
 import java.util.Iterator;
 
 public class Server {
 
+    public static String path = "nio-examples/src/main/resources";
     static final ByteBuffer buffer = ByteBuffer.allocate(256);
 
     public static void main(String[] args) throws IOException {
@@ -19,6 +18,7 @@ public class Server {
         server.configureBlocking(false);
         Selector selector = Selector.open();
         server.register(selector, SelectionKey.OP_ACCEPT);
+        System.out.println("server path: " + path);
         while (server.isOpen()) {
             selector.select();
             Iterator<SelectionKey> iterator
@@ -53,6 +53,11 @@ public class Server {
             while (buffer.hasRemaining()) {
                 s.append((char) buffer.get());
             }
+//            FileChannel aFile = new RandomAccessFile(path, "rw").getChannel();
+//            while (buffer.hasRemaining()){
+//            System.out.print((char) buffer.get());
+//                aFile.write(buffer);
+//        }
             buffer.clear();
         }
         if (current.isValid()) {
@@ -65,12 +70,13 @@ public class Server {
                 }
             }
         }
+
     }
 
     static int cnt = 1;
 
     private static void handleAccept(SelectionKey current, Selector selector) throws IOException {
-        SocketChannel channel = ((ServerSocketChannel)current.channel()).accept();
+        SocketChannel channel = ((ServerSocketChannel) current.channel()).accept();
         channel.configureBlocking(false);
         System.out.println("Client accepted!");
         channel.register(selector, SelectionKey.OP_READ, "user" + (cnt++));
